@@ -1,26 +1,52 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import Title from './components/Title';
+import Form from './components/Form';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+	today = new Date();
+	time = this.today.toLocaleTimeString('en-US');
+	date = (this.today.getMonth()+1)+'-'+this.today.getDate() + '-' + this.today.getFullYear();
+	dateTime = this.date + ' ' + this.time;
+
+
+	state = {
+		time: this.dateTime,
+		selected: 'By City/Country',
+		isSubmitted: false
+			}
+
+	// For Form.js
+	handleOptionChange = changeEvent => {
+		this.setState({
+			selected: changeEvent.target.value
+		});
+	};
+
+	handleFormSubmit = formSubmitEvent => {
+		formSubmitEvent.preventDefault();
+		this.setState({
+			isSubmitted: true
+		});
+  		console.log(this.state.isSubmitted);
+	};
+
+
+
+   render(){
+    return(
+      <div>
+        <Title 
+        title="Title"
+        time={this.state.time}
+        />
+        {!this.state.isSubmitted && <Form 
+        	handleOptionChange={this.handleOptionChange}
+        	selected={this.state.selected}
+        	handleFormSubmit={this.handleFormSubmit}
+        	/>
+        }
+      </div>
+   )
+  }
 }
-
 export default App;
