@@ -10,4 +10,4 @@
   <li>Make it pretty!!! Hopefully improve my eye for design hahaha</li>
 </ul>
 
-<img src="roadmap.JPG" alt="Roadmap for Weather Project">
+<img src="roadmap.JPG" alt="Roadmap for Weather Project" style="transform:rotate(90deg);">
