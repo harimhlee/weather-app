@@ -9,3 +9,5 @@
   <li>Add React routes for top level page showing 5-day forecast and clicking on a day shows hourly forecast</li>
   <li>Make it pretty!!! Hopefully improve my eye for design hahaha</li>
 </ul>
+
+<img src="roadmap.JPG" alt="Roadmap for Weather Project">
