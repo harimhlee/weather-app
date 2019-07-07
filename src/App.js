@@ -3,6 +3,7 @@ import Title from './components/Title';
 import Form from './components/Form';
 import ZipcodeInput from './components/ZipcodeInput';
 import CityCountryInput from './components/CityCountryInput';
+import DisplayWeatherTitle from './components/DisplayWeatherTitle';
 
 
 class App extends Component {
@@ -15,12 +16,17 @@ class App extends Component {
 	state = {
 		time: this.dateTime,
 		selected: 'By City/Country',
-		isSubmitted: false,
+		displayTitle: true,
+		displayRadio: true,
+		displayInput: false,
 		city: undefined,
 		country: undefined,
 		zipcode: undefined,
 		temperature: undefined,
-		humidity: undefined 
+		humidity: undefined, 
+		description: undefined,
+		error: undefined,
+		displayWeather: false,
 		}
 
 	// For Form.js
@@ -33,46 +39,92 @@ class App extends Component {
 	handleFormSubmit = formSubmitEvent => {
 		formSubmitEvent.preventDefault();
 		this.setState({
-			isSubmitted: true
+			displayInput: true,
+			displayRadio: false
 		});
 	};
 
 
 	getCityCountryWeather = async (e) => {
 		e.preventDefault();
-  		const api_call = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=london,uk&appid=d951a9e409977399fb17f61bf4a8bb87`);
+		const city = e.target.elements.city.value;
+		const country = e.target.elements.country.value;
+		const api_call = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=d951a9e409977399fb17f61bf4a8bb87`);
   		const response = await api_call.json();
-  		console.log(response);
+  		if (city && country) {
+	  		this.setState({
+	  				temperature: response.main.temp,
+		  			city: city,
+		  			country: response.sys.country,
+		  			humidity: response.main.humidity,
+		  			description: response.weather[0].description,
+		  			error: "",
+		  			displayWeather: true,
+		  			displayInput: false,
+		  			displayTitle: false,
+				});
+  			} else {
+  				alert("City/Country not found.");
+  			}
+
   	};
   
   	getZipcodeWeather = async (e) => {
   		e.preventDefault();
-  		const api_call = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=london,uk&appid=d951a9e409977399fb17f61bf4a8bb87`);
+ 		const zipcode = e.target.elements.zipcode.value;
+ 		const api_call = await fetch(`http://api.openweathermap.org/data/2.5/weather?zip=${zipcode}&appid=d951a9e409977399fb17f61bf4a8bb87`);
   		const response = await api_call.json();
-  		console.log(response);
+  		const city = response.name;
+  		if (city) {
+	  		this.setState({
+	  			temperature: response.main.temp,
+	  			city: city,
+	  			country: response.sys.country,
+	  			humidity: response.main.humidity,
+	  			description: response.weather[0].description,
+	  			error: "",
+	  			displayWeather: true,
+	  			displayInput: false,
+	  			displayTitle: false
+	  		});
+	  	} else {
+	  		alert("Not a valid zipcode.");
+	  	};
   	};
 
 
    render(){
     return(
       <div>
-        <Title 
-        title="Title"
-        time={this.state.time}
-        />
-        {!this.state.isSubmitted && <Form 
-        	handleOptionChange={this.handleOptionChange}
-        	selected={this.state.selected}
-        	handleFormSubmit={this.handleFormSubmit}
+        {this.state.displayTitle && 
+        	<Title 
+        		title="Title"
+        		time={this.state.time}
         	/>}
-        {this.state.isSubmitted && this.state.selected==='By Zipcode' && 
+        {this.state.displayRadio && 
+        	<Form 
+        		handleOptionChange={this.handleOptionChange}
+        		selected={this.state.selected}
+        		handleFormSubmit={this.handleFormSubmit}
+        	/>}
+        {this.state.displayInput && this.state.selected==='By Zipcode' && 
         	<ZipcodeInput 
         		getWeather={this.getZipcodeWeather}
-        		/>}
-        {this.state.isSubmitted && this.state.selected==='By City/Country' && 
+        	/>}
+        {this.state.displayInput && this.state.selected==='By City/Country' && 
         	<CityCountryInput 
         		getWeather={this.getCityCountryWeather}
-        		/>}
+        	/>}
+        {this.state.displayWeather && 
+        	<DisplayWeatherTitle 
+        		city={this.state.city}
+        		country={this.state.country}
+        		zipcode={this.state.zipcode}
+        		temperature={this.state.temperature}
+        		humidity={this.state.humidity}
+        		description={this.state.description}
+        		error={this.state.error}
+        	/>}
       </div>
    )
   }

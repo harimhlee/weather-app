@@ -10,6 +10,7 @@ class ZipcodeInput extends Component {
 				onSubmit={this.props.getWeather}>
 				<input 
 					type="text"
+					name="zipcode"
 					placeholder="Enter Your Zipcode" />
 				<input
 					type="submit"
