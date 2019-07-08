@@ -1,24 +1,22 @@
-import React, {Component} from 'react';
+import React from 'react';
 // if component needs to render more than one thing, must have a state
 
-class Form extends Component {
-
-	render() {
+const Form = (props) => {
 	return (
 		<form
-			onSubmit={this.props.handleFormSubmit}>
+			onSubmit={props.handleFormSubmit}>
           <label>
             <input 
             	type="radio" 
             	value="By City/Country" 
-            	checked={this.props.selected==='By City/Country'}
-            	onChange={this.props.handleOptionChange}
+            	checked={props.selected==='By City/Country'}
+            	onChange={props.handleOptionChange}
             	 /> By City/Country <br />
             <input 
             	type="radio" 
             	value="By Zipcode" 
-            	checked={this.props.selected==='By Zipcode'}
-            	onChange={this.props.handleOptionChange}
+            	checked={props.selected==='By Zipcode'}
+            	onChange={props.handleOptionChange}
             	/> By Zipcode <br />
             <input 
             	type="submit" 
@@ -27,9 +25,8 @@ class Form extends Component {
           </label>		
           </form>
 	);
-	}
+};
 
-}
 
 
 export default Form;
