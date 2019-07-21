@@ -21,11 +21,11 @@ class App extends Component {
 		displayRadio: true,
 		displayInput: false,
 		displayWeather: false,
-		city: undefined,
-		country: undefined,
-		temperature: undefined,
-		humidity: undefined, 
-		description: undefined,
+		// city: undefined,
+		// country: undefined,
+		// temperature: undefined,
+		// humidity: undefined, 
+		// description: undefined,
 		}
 
 	// For Form.js
@@ -48,8 +48,11 @@ class App extends Component {
 		e.preventDefault();
 		const city = e.target.elements.city.value;
 		const country = e.target.elements.country.value;
-		const api_call = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city},${country}&units=imperial&appid=d951a9e409977399fb17f61bf4a8bb87`);
-  		const response = await api_call.json();
+		const api_call_curr = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city},${country}&units=imperial&appid=d951a9e409977399fb17f61bf4a8bb87`);
+		const response = await api_call_curr.json();
+		const api_call_forecast = await fetch(`http://api.openweathermap.org/data/2.5/forecast?q=${city},${country}&units=imperial&appid=d951a9e409977399fb17f61bf4a8bb87`);
+		const forecast = await api_call_forecast.json();
+		console.log(response);
   		if (city && country) {
 	  		this.setState({
 	  				temperature: response.main.temp,
@@ -70,9 +73,11 @@ class App extends Component {
   	getZipcodeWeather = async (e) => {
   		e.preventDefault();
  		const zipcode = e.target.elements.zipcode.value;
- 		const api_call = await fetch(`http://api.openweathermap.org/data/2.5/weather?zip=${zipcode}&units=imperial&appid=d951a9e409977399fb17f61bf4a8bb87`);
-  		const response = await api_call.json();
-  		const city = response.name;
+ 		const api_call_curr = await fetch(`http://api.openweathermap.org/data/2.5/weather?zip=${zipcode}&units=imperial&appid=d951a9e409977399fb17f61bf4a8bb87`);
+  		const response = await api_call_curr.json();
+		const city = response.name;
+		const api_call_forecast = await fetch(`http://api.openweathermap.org/data/2.5/weather?zip=${zipcode}&units=imperial&appid=d951a9e409977399fb17f61bf4a8bb87`);
+		const forecast = await api_call_forecast.json();
   		if (city) {
 	  		this.setState({
 	  			temperature: response.main.temp,
