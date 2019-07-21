@@ -11,13 +11,14 @@ import ForecastTitle from './components/ForecastTitle';
 class App extends Component {
 	today = new Date();
 	time = this.today.toLocaleTimeString('en-US');
-	currTime = this.today.toGMTString();
+	currTime = (this.today.getFullYear()) + '-' + (this.today.getMonth()+1) + '-' + this.today.getDate();
 	date = (this.today.getMonth()+1) + '-' + this.today.getDate() + '-' + this.today.getFullYear();
 	dateTime = this.date + ' ' + this.time;
 
 
 	state = {
 		time: this.dateTime,
+		currTime: this.currTime,
 		selected: 'By City/Country',
 		displayTitle: true,
 		displayRadio: true,
@@ -137,7 +138,7 @@ class App extends Component {
 		{this.state.displayWeather && 
 			<ForecastTitle
 				forecast={this.state.forecast}
-				currTime={this.currTime}
+				currTime={this.state.currTime}
 			/>}
       </div>
    )

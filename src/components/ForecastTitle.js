@@ -3,43 +3,32 @@ import ForecastDay from './ForecastDay';
 
 
 const ForecastTitle = (props) => {
-        const currDate = props.currTime.slice(0, 11);
-        console.log(currDate);
-        let oneDay = [];
-        let twoDays = [];
-        let threeDays = [];
-        let fourDays = [];
-        let fiveDays = [];
-        for (var i = 0; i < props.forecast.length; i ++) {
-            var date = props.forecast[i].dt;
-            var myDate = new Date(date *1000);
-            var myTime=myDate.toGMTString().slice(0, 11);
-            if (myTime === currDate) {
-                continue;
-            }
-
+        let start = 0;
+        while (props.currTime === props.forecast[start].dt_txt.slice(0, 11)) {
+            start ++;
         }
+
         return (
             <div>
                 <h1> This is the forecast for the next 5 days: {console.log(props.forecast)}</h1>
                 <ForecastDay 
-                    forecast={props.forecast.slice(0,7)}
+                    forecast={props.forecast.slice(start,start + 8)}
                     onSubmit={props.onSubmit}
                 />
                 <ForecastDay 
-                    forecast={props.forecast.slice(7, 15)}
+                    forecast={props.forecast.slice(start + 8, start + 16)}
                     onSubmit={props.onSubmit}
                 />
                 <ForecastDay 
-                    forecast={props.forecast.slice(15, 23)}
+                    forecast={props.forecast.slice(start + 16, start + 24)}
                     onSubmit={props.onSubmit}
                 />
                 <ForecastDay 
-                    forecast={props.forecast.slice(23, 31)}
+                    forecast={props.forecast.slice(start + 24, start + 32)}
                     onSubmit={props.onSubmit}
                 />
                 <ForecastDay 
-                    forecast={props.forecast.slice(31, 39)}
+                    forecast={props.forecast.slice(start + 32, start + 40)}
                     onSubmit={props.onSubmit}
                 />
              </div>            
