@@ -4,13 +4,14 @@ import Form from './components/Form';
 import ZipcodeInput from './components/ZipcodeInput';
 import CityCountryInput from './components/CityCountryInput';
 import DisplayWeatherTitle from './components/DisplayWeatherTitle';
-import DayForecast from './components/DayForecast';
+import CurrentWeather from './components/CurrentWeather';
+import ForecastTitle from './components/ForecastTitle';
 
 
 class App extends Component {
 	today = new Date();
 	time = this.today.toLocaleTimeString('en-US');
-	date = (this.today.getMonth()+1)+'-'+this.today.getDate() + '-' + this.today.getFullYear();
+	date = (this.today.getMonth()+1) + '-' + this.today.getDate() + '-' + this.today.getFullYear();
 	dateTime = this.date + ' ' + this.time;
 
 
@@ -21,11 +22,6 @@ class App extends Component {
 		displayRadio: true,
 		displayInput: false,
 		displayWeather: false,
-		// city: undefined,
-		// country: undefined,
-		// temperature: undefined,
-		// humidity: undefined, 
-		// description: undefined,
 		}
 
 	// For Form.js
@@ -52,17 +48,20 @@ class App extends Component {
 		const response = await api_call_curr.json();
 		const api_call_forecast = await fetch(`http://api.openweathermap.org/data/2.5/forecast?q=${city},${country}&units=imperial&appid=d951a9e409977399fb17f61bf4a8bb87`);
 		const forecast = await api_call_forecast.json();
-		console.log(response);
   		if (city && country) {
 	  		this.setState({
 	  				temperature: response.main.temp,
 		  			city: city,
 		  			country: response.sys.country,
-		  			humidity: response.main.humidity,
+					humidity: response.main.humidity,
+					tempMax: response.main.tempMax,
+					tempMin: response.main.tempMin,
 		  			description: response.weather[0].description,
 		  			displayWeather: true,
 		  			displayInput: false,
-		  			displayTitle: false,
+					displayTitle: false,
+					forecast: forecast.list
+
 				});
   			} else {
   				alert("City/Country not found.");
@@ -74,9 +73,9 @@ class App extends Component {
   		e.preventDefault();
  		const zipcode = e.target.elements.zipcode.value;
  		const api_call_curr = await fetch(`http://api.openweathermap.org/data/2.5/weather?zip=${zipcode}&units=imperial&appid=d951a9e409977399fb17f61bf4a8bb87`);
-  		const response = await api_call_curr.json();
+		const response = await api_call_curr.json();
 		const city = response.name;
-		const api_call_forecast = await fetch(`http://api.openweathermap.org/data/2.5/weather?zip=${zipcode}&units=imperial&appid=d951a9e409977399fb17f61bf4a8bb87`);
+		const api_call_forecast = await fetch(`http://api.openweathermap.org/data/2.5/forecast?zip=${zipcode}&units=imperial&appid=d951a9e409977399fb17f61bf4a8bb87`);
 		const forecast = await api_call_forecast.json();
   		if (city) {
 	  		this.setState({
@@ -84,15 +83,23 @@ class App extends Component {
 	  			city: city,
 	  			country: response.sys.country,
 	  			humidity: response.main.humidity,
-	  			description: response.weather[0].description,
+				description: response.weather[0].description,
+				tempMax: response.main.tempMax,
+				tempMin: response.main.tempMin,
 	  			displayWeather: true,
 	  			displayInput: false,
-	  			displayTitle: false
+				displayTitle: false,
+				forecast: forecast.list
 	  		});
 	  	} else {
 	  		alert("Not a valid zipcode.");
 	  	};
-  	};
+	  };
+	  
+
+	handleForecastSubmit = () => {
+
+	}; 
 
 
    render(){
@@ -123,11 +130,18 @@ class App extends Component {
         		country={this.state.country}
         	/>}
         {this.state.displayWeather && 
-        	<DayForecast 
+        	<CurrentWeather 
         		temperature={this.state.temperature}
         		humidity={this.state.humidity}
-        		description={this.state.description}
-        	/>}
+				description={this.state.description}
+				tempMax={this.state.temp_max}
+				tempMin={this.state.temp_min}
+			/>}
+		{this.state.displayWeather && 
+			<ForecastTitle
+				forecast={this.state.forecast}
+				onSubmit={this.handleForecastSubmit}
+			/>}
       </div>
    )
   }

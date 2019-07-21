@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DayForecast = (props) => {
+const CurrentWeather = (props) => {
 
 
 	const capitalizeGreeting = greetingString => {
@@ -16,11 +16,11 @@ const DayForecast = (props) => {
 
 	return (
 		<header>
-			<h2>{capitalizeGreeting(props.description).slice(0, -1)}! The current temperature is {props.temperature} degrees Fahrenheit.</h2>
+			<h2>{capitalizeGreeting(props.description).slice(0, -1)}! The current temperature is {props.temperature} degrees Fahrenheit. Humidity is currently {props.humidity}. Today's max temp is {props.tempMax} and min temp is {props.tempMin}.</h2>
 		</header>
 		);
 };
 
 
 
-export default DayForecast;
+export default CurrentWeather;
