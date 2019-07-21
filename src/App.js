@@ -11,6 +11,7 @@ import ForecastTitle from './components/ForecastTitle';
 class App extends Component {
 	today = new Date();
 	time = this.today.toLocaleTimeString('en-US');
+	currTime = this.today.toGMTString();
 	date = (this.today.getMonth()+1) + '-' + this.today.getDate() + '-' + this.today.getFullYear();
 	dateTime = this.date + ' ' + this.time;
 
@@ -54,8 +55,8 @@ class App extends Component {
 		  			city: city,
 		  			country: response.sys.country,
 					humidity: response.main.humidity,
-					tempMax: response.main.tempMax,
-					tempMin: response.main.tempMin,
+					tempMax: response.main.temp_max,
+					tempMin: response.main.temp_min,
 		  			description: response.weather[0].description,
 		  			displayWeather: true,
 		  			displayInput: false,
@@ -84,8 +85,8 @@ class App extends Component {
 	  			country: response.sys.country,
 	  			humidity: response.main.humidity,
 				description: response.weather[0].description,
-				tempMax: response.main.tempMax,
-				tempMin: response.main.tempMin,
+				tempMax: response.main.temp_max,
+				tempMin: response.main.temp_min,
 	  			displayWeather: true,
 	  			displayInput: false,
 				displayTitle: false,
@@ -96,10 +97,6 @@ class App extends Component {
 	  	};
 	  };
 	  
-
-	handleForecastSubmit = () => {
-
-	}; 
 
 
    render(){
@@ -134,13 +131,13 @@ class App extends Component {
         		temperature={this.state.temperature}
         		humidity={this.state.humidity}
 				description={this.state.description}
-				tempMax={this.state.temp_max}
-				tempMin={this.state.temp_min}
+				tempMax={this.state.tempMax}
+				tempMin={this.state.tempMin}
 			/>}
 		{this.state.displayWeather && 
 			<ForecastTitle
 				forecast={this.state.forecast}
-				onSubmit={this.handleForecastSubmit}
+				currTime={this.currTime}
 			/>}
       </div>
    )
